@@ -1,7 +1,9 @@
-package jemboy.alarmz;
+package jemboy.alarmz.Main;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import jemboy.alarmz.R;
 
 public class AlarmActivity extends Activity {
 

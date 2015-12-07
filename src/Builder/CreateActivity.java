@@ -66,12 +66,23 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
         updateListView();
     }
 
-    public void onEditCompleted() {
-
+    public void onEditCompleted(String description, int duration, int position) {
+        Interval interval = new Interval(description, duration, position);
+        intervalArrayList.set(position, interval);
+        stringArrayList.set(position, interval.toString());
+        updateListView();
     }
 
-    public void onDeleteCompleted() {
-
+    public void onDeleteCompleted(int position) {
+        intervalArrayList.remove(position);
+        stringArrayList.remove(position);
+        for (int i = position; i < intervalArrayList.size(); i++) {
+            Interval interval = intervalArrayList.get(i);
+            interval.setPosition(i);
+            intervalArrayList.set(i, interval);
+            stringArrayList.set(i, interval.toString());
+        }
+        updateListView();
     }
 
     public void updateListView() {

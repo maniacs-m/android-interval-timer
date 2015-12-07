@@ -1,16 +1,21 @@
 package jemboy.alarmz.Builder;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import jemboy.alarmz.Dialog.AddDialog;
 import jemboy.alarmz.Dialog.DeleteDialog;
 import jemboy.alarmz.Dialog.EditDialog;
+import jemboy.alarmz.Main.AlarmActivity;
 import jemboy.alarmz.R;
 import jemboy.alarmz.Utility.Interval;
 
@@ -18,7 +23,8 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
     ArrayList<Interval> intervalArrayList;
     ArrayList<String> stringArrayList;
     ListView intervalView;
-    Button addButton, editButton, deleteButton;
+    Button addButton, editButton, deleteButton, saveButton, startButton;
+    EditText titleField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +36,13 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
 
         intervalView = (ListView)findViewById(R.id.intervals);
 
+        titleField = (EditText)findViewById(R.id.title);
+
         addButton = (Button)findViewById(R.id.add);
         editButton = (Button)findViewById(R.id.edit);
         deleteButton = (Button)findViewById(R.id.delete);
+        saveButton = (Button)findViewById(R.id.save);
+        startButton = (Button)findViewById(R.id.start);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +65,28 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
             public void onClick(View v) {
                 DeleteDialog deleteDialog = new DeleteDialog(CreateActivity.this);
                 deleteDialog.show();
+            }
+        });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = titleField.getText().toString();
+
+            }
+        });
+
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (intervalArrayList.size() == 0) {
+                    startButton.setError("You haven't set any alarms!");
+                }
+                else {
+                    Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
+                    // Set the bundle extras
+                    startActivity(intent);
+                }
             }
         });
     }

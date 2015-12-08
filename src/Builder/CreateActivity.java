@@ -1,7 +1,9 @@
 package jemboy.alarmz.Builder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,13 +19,18 @@ import java.util.ArrayList;
 import jemboy.alarmz.Dialog.AddDialog;
 import jemboy.alarmz.Dialog.DeleteDialog;
 import jemboy.alarmz.Dialog.EditDialog;
+import jemboy.alarmz.Listener.OnSaveListener;
 import jemboy.alarmz.Main.AlarmActivity;
 import jemboy.alarmz.R;
-import jemboy.alarmz.Utility.Constants;
 import jemboy.alarmz.Utility.Interval;
 
 public class CreateActivity extends Activity implements OnDialogCompleted {
     private ArrayList<Interval> intervalArrayList;
+
+    public ArrayList<Interval> getIntervalArrayList() {
+        return intervalArrayList;
+    }
+
     private ArrayList<String> stringArrayList;
     private ListView intervalView;
 
@@ -37,7 +44,7 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
 
         intervalView = (ListView)findViewById(R.id.intervals);
 
-        final EditText titleField = (EditText)findViewById(R.id.title);
+        final EditText titleText = (EditText)findViewById(R.id.title);
 
         final Button    addButton = (Button)findViewById(R.id.add),
                         editButton = (Button)findViewById(R.id.edit),
@@ -69,34 +76,16 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = titleField.getText().toString();
-                SharedPreferences sharedPref = getSharedPreferences(Constants.sharedPrefName, Context.MODE_PRIVATE);
-                if (sharedPref.contains(title)) {
-                    // Overwrite
-
-
-
-                } else {
-                    SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
-                    String jsonString = getJSONString(intervalArrayList);
-                    sharedPrefEditor.putString(title, jsonString);
-                    sharedPrefEditor.apply();
-                }
-            }
-        });
+        saveButton.setOnClickListener(new OnSaveListener(this));
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (intervalArrayList.size() == 0) {
                     startButton.setError("You haven't set any alarms!");
-                } else if (titleField.getText().toString().equals("")) {
-                    titleField.setError("You need to set a title!");
-                }
-                else {
+                } else if (titleText.getText().toString().equals("")) {
+                    titleText.setError("You need to set a title!");
+                } else {
                     Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
                     String jsonString = getJSONString(intervalArrayList);
                     intent.putExtra("jsonArray", jsonString);

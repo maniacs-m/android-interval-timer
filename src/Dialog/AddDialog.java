@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-
 import jemboy.alarmz.Builder.CreateActivity;
 import jemboy.alarmz.Builder.OnDialogCompleted;
 import jemboy.alarmz.R;

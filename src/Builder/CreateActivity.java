@@ -1,11 +1,7 @@
 package jemboy.alarmz.Builder;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,15 +18,14 @@ import jemboy.alarmz.Dialog.EditDialog;
 import jemboy.alarmz.Listener.OnSaveListener;
 import jemboy.alarmz.Main.AlarmActivity;
 import jemboy.alarmz.R;
+import jemboy.alarmz.Utility.Constants;
 import jemboy.alarmz.Utility.Interval;
 
 public class CreateActivity extends Activity implements OnDialogCompleted {
     private ArrayList<Interval> intervalArrayList;
-
     public ArrayList<Interval> getIntervalArrayList() {
         return intervalArrayList;
     }
-
     private ArrayList<String> stringArrayList;
     private ListView intervalView;
 
@@ -39,12 +34,31 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
 
-        intervalArrayList = new ArrayList<>();
-        stringArrayList = new ArrayList<>();
-
-        intervalView = (ListView)findViewById(R.id.intervals);
+        Bundle bundle = getIntent().getExtras();
 
         final EditText titleText = (EditText)findViewById(R.id.title);
+        String title = bundle.getString("title");
+        titleText.setText(title);
+
+        intervalArrayList = new ArrayList<>();
+        stringArrayList = new ArrayList<>();
+        try {
+            String jsonString = bundle.getString(Constants.jsonArray);
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String description = jsonObject.getString("description");
+                int duration = jsonObject.getInt("duration"), position = jsonObject.getInt("position");
+
+                Interval interval = new Interval(description, duration, position);
+                intervalArrayList.add(interval);
+                stringArrayList.add(interval.toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        intervalView = (ListView)findViewById(R.id.intervals);
+        updateListView();
 
         final Button    addButton = (Button)findViewById(R.id.add),
                         editButton = (Button)findViewById(R.id.edit),

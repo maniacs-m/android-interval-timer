@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import org.json.JSONArray;
+
 import jemboy.alarmz.Builder.CreateActivity;
 import jemboy.alarmz.Builder.LoadActivity;
 import jemboy.alarmz.R;
+import jemboy.alarmz.Utility.Constants;
 
 public class MainActivity extends Activity {
     private Button newPlaylist, loadPlaylist;
@@ -22,7 +26,10 @@ public class MainActivity extends Activity {
         newPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateActivity.class);
+                Intent intent = new Intent(MainActivity.this, CreateActivity.class);
+                intent.putExtra("title", "");
+                JSONArray jsonArray = new JSONArray();
+                intent.putExtra(Constants.jsonArray, jsonArray.toString());
                 startActivity(intent);
             }
         });
@@ -30,7 +37,7 @@ public class MainActivity extends Activity {
         loadPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoadActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoadActivity.class);
                 startActivity(intent);
             }
         });

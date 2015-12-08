@@ -10,21 +10,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.ArrayList;
 import jemboy.alarmz.Dialog.AddDialog;
 import jemboy.alarmz.Dialog.DeleteDialog;
 import jemboy.alarmz.Dialog.EditDialog;
 import jemboy.alarmz.Main.AlarmActivity;
 import jemboy.alarmz.R;
+import jemboy.alarmz.Utility.Constants;
 import jemboy.alarmz.Utility.Interval;
 
 public class CreateActivity extends Activity implements OnDialogCompleted {
-    ArrayList<Interval> intervalArrayList;
-    ArrayList<String> stringArrayList;
-    ListView intervalView;
-    Button addButton, editButton, deleteButton, saveButton, startButton;
-    EditText titleField;
+    private ArrayList<Interval> intervalArrayList;
+    private ArrayList<String> stringArrayList;
+    private ListView intervalView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +37,13 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
 
         intervalView = (ListView)findViewById(R.id.intervals);
 
-        titleField = (EditText)findViewById(R.id.title);
+        final EditText titleField = (EditText)findViewById(R.id.title);
 
-        addButton = (Button)findViewById(R.id.add);
-        editButton = (Button)findViewById(R.id.edit);
-        deleteButton = (Button)findViewById(R.id.delete);
-        saveButton = (Button)findViewById(R.id.save);
-        startButton = (Button)findViewById(R.id.start);
+        final Button    addButton = (Button)findViewById(R.id.add),
+                        editButton = (Button)findViewById(R.id.edit),
+                        deleteButton = (Button)findViewById(R.id.delete),
+                        saveButton = (Button)findViewById(R.id.save),
+                        startButton = (Button)findViewById(R.id.start);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +73,18 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
             @Override
             public void onClick(View v) {
                 String title = titleField.getText().toString();
+                SharedPreferences sharedPref = getSharedPreferences(Constants.sharedPrefName, Context.MODE_PRIVATE);
+                if (sharedPref.contains(title)) {
+                    // Overwrite
 
+
+
+                } else {
+                    SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
+                    String jsonString = getJSONString(intervalArrayList);
+                    sharedPrefEditor.putString(title, jsonString);
+                    sharedPrefEditor.apply();
+                }
             }
         });
 
@@ -81,10 +93,13 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
             public void onClick(View v) {
                 if (intervalArrayList.size() == 0) {
                     startButton.setError("You haven't set any alarms!");
+                } else if (titleField.getText().toString().equals("")) {
+                    titleField.setError("You need to set a title!");
                 }
                 else {
                     Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
-                    // Set the bundle extras
+                    String jsonString = getJSONString(intervalArrayList);
+                    intent.putExtra("jsonArray", jsonString);
                     startActivity(intent);
                 }
             }
@@ -124,5 +139,24 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
                 stringArrayList
         );
         intervalView.setAdapter(arrayAdapter);
+    }
+
+    public String getJSONString(ArrayList<Interval> arrayList) {
+        JSONArray jsonArray = new JSONArray();
+        try {
+            for (int i = 0; i < arrayList.size(); i++) {
+                Interval interval = arrayList.get(i);
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("position", interval.getPosition());
+                jsonObject.put("description", interval.getDescription());
+                jsonObject.put("duration", interval.getDuration());
+
+                jsonArray.put(jsonObject);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonArray.toString();
     }
 }

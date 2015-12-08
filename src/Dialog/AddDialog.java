@@ -13,8 +13,8 @@ import jemboy.alarmz.Builder.OnDialogCompleted;
 import jemboy.alarmz.R;
 
 public class AddDialog extends AlertDialog.Builder {
-    OnDialogCompleted dialogCompleted;
-    EditText description, duration;
+    private OnDialogCompleted dialogCompleted;
+    private EditText description, duration;
 
     public AddDialog(Context context) {
         super(context);

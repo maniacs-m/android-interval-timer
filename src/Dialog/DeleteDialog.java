@@ -13,8 +13,8 @@ import jemboy.alarmz.Builder.OnDialogCompleted;
 import jemboy.alarmz.R;
 
 public class DeleteDialog extends AlertDialog.Builder {
-    OnDialogCompleted dialogCompleted;
-    EditText position;
+    private OnDialogCompleted dialogCompleted;
+    private EditText position;
 
     public DeleteDialog(Context context) {
         super(context);

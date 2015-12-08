@@ -6,13 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.EditText;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-
 import jemboy.alarmz.Builder.CreateActivity;
 import jemboy.alarmz.R;
 import jemboy.alarmz.Utility.Constants;
@@ -34,7 +28,6 @@ public class OnSaveListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         ArrayList<Interval> intervalArrayList = createActivity.getIntervalArrayList();
-
         final String title = titleText.getText().toString(), jsonString = createActivity.getJSONString(intervalArrayList);
         final SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
 

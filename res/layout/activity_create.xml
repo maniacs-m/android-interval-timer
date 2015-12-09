@@ -1,61 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Playlist Title"
-        android:id="@+id/title"
-        android:layout_alignParentTop="true"/>
-    <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/title"/>
+
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/save_start"
-        android:layout_alignParentBottom="true">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save "
-            android:id="@+id/save"
-            android:layout_weight="0.5"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start"
-            android:id="@+id/start"
-            android:layout_weight="0.5"/>
-        </LinearLayout>
+        android:id="@+id/intervals"
+        android:layout_weight="1"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/add_edit_delete"
-        android:layout_above="@id/save_start">
+        android:layout_weight="0">
+
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text=" Add "
+            android:text="Add "
             android:id="@+id/add"
             android:layout_weight="0.3"/>
+
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text=" Edit "
+            android:text="Edit"
             android:id="@+id/edit"
             android:layout_weight="0.3"/>
+
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Delete"
             android:id="@+id/delete"
             android:layout_weight="0.3"/>
+
     </LinearLayout>
-    <ListView
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/intervals"
-        android:layout_below="@id/title"
-        android:layout_above="@id/add_edit_delete"/>
-</RelativeLayout>
+        android:id="@+id/save_start">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/save"
+            android:layout_weight="0.5"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Start"
+            android:id="@+id/start"
+            android:layout_weight="0.5"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -31,18 +31,18 @@ public class AlarmActivity extends Activity {
 
         Bundle bundle = getIntent().getExtras();
         TextView titleView = (TextView)findViewById(R.id.titleView);
-        titleView.setText(bundle.getString("title"));
+        titleView.setText(bundle.getString(Constants.TITLE));
 
         intervalArrayList = new ArrayList<>();
         try {
-            String jsonString = bundle.getString("jsonArray");
+            String jsonString = bundle.getString(Constants.JSONSTRING);
             JSONArray jsonArray = new JSONArray(jsonString);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String description = jsonObject.getString("description");
-                int duration = jsonObject.getInt("duration"), position = jsonObject.getInt("position");
+                String description = jsonObject.getString(Constants.DESCRIPTION);
+                int duration = jsonObject.getInt(Constants.DURATION);
 
-                Interval interval = new Interval(description, duration, position);
+                Interval interval = new Interval(description, duration);
                 intervalArrayList.add(interval);
             }
         } catch (JSONException e) {

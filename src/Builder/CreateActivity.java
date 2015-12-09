@@ -48,9 +48,9 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String description = jsonObject.getString(Constants.DESCRIPTION);
-                int duration = jsonObject.getInt(Constants.DURATION), position = jsonObject.getInt(Constants.POSITION);
+                int duration = jsonObject.getInt(Constants.DURATION);
 
-                Interval interval = new Interval(description, duration, position);
+                Interval interval = new Interval(description, duration);
                 intervalArrayList.add(interval);
                 stringArrayList.add(interval.toString());
             }
@@ -58,7 +58,7 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
             e.printStackTrace();
         }
         intervalView = (ListView)findViewById(R.id.intervals);
-        updateListView(); // Layout is finalized here.. title and listview are set
+        updateListView();
 
         final Button    addButton = (Button)findViewById(R.id.add),
                         editButton = (Button)findViewById(R.id.edit),
@@ -96,9 +96,9 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
             @Override
             public void onClick(View v) {
                 if (intervalArrayList.size() == 0) {
-                    startButton.setError("You haven't set any alarms!");
+                    startButton.setError("You haven't set any alarms!", null);
                 } else if (titleText.getText().toString().equals("")) {
-                    titleText.setError("You need to set a title!");
+                    titleText.setError("You need to set a title!", null);
                 } else {
                     Intent intent = new Intent(CreateActivity.this, AlarmActivity.class);
                     String jsonString = getJSONString(intervalArrayList);
@@ -111,14 +111,14 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
     }
 
     public void onAddCompleted(String description, int duration) {
-        Interval interval = new Interval(description, duration, intervalArrayList.size() + 1);
+        Interval interval = new Interval(description, duration);
         intervalArrayList.add(interval);
         stringArrayList.add(interval.toString());
         updateListView();
     }
 
     public void onEditCompleted(String description, int duration, int position) {
-        Interval interval = new Interval(description, duration, position);
+        Interval interval = new Interval(description, duration);
         intervalArrayList.set(position - 1, interval);
         stringArrayList.set(position - 1, interval.toString());
         updateListView();
@@ -130,7 +130,6 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
         stringArrayList.remove(position);
         for (int i = position; i < intervalArrayList.size(); i++) {
             Interval interval = intervalArrayList.get(i);
-            interval.setPosition(i + 1);
             intervalArrayList.set(i, interval);
             stringArrayList.set(i, interval.toString());
         }
@@ -155,7 +154,6 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put(Constants.DESCRIPTION, interval.getDescription());
                 jsonObject.put(Constants.DURATION, interval.getDuration());
-                jsonObject.put(Constants.POSITION, interval.getPosition());
                 jsonArray.put(jsonObject);
             }
         } catch (JSONException e) {

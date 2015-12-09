@@ -2,12 +2,11 @@ package jemboy.alarmz.Utility;
 
 public class Interval {
     private String description;
-    private int duration, position;
+    private int duration;
 
-    public Interval(String description, int duration, int position) {
+    public Interval(String description, int duration) {
         this.description = description;
         this.duration = duration;
-        this.position = position;
     }
 
     public String getDescription() {
@@ -26,17 +25,8 @@ public class Interval {
         this.duration = duration;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public String toString() {
-        String position = "#" + Integer.toString(this.position);
         String duration = "Duration: " + Integer.toString(this.duration) + " seconds";
-        return position + " - " + duration + "\n" + this.description;
+        return duration + "\n" + this.description;
     }
 }

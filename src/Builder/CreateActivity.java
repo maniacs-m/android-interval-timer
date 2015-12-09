@@ -100,8 +100,9 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
                 } else if (titleText.getText().toString().equals("")) {
                     titleText.setError("You need to set a title!");
                 } else {
-                    Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
+                    Intent intent = new Intent(CreateActivity.this, AlarmActivity.class);
                     String jsonString = getJSONString(intervalArrayList);
+                    intent.putExtra("title", titleText.getText().toString());
                     intent.putExtra("jsonArray", jsonString);
                     startActivity(intent);
                 }

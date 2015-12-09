@@ -29,7 +29,7 @@ public class LoadActivity extends Activity {
 
         ListView listView = (ListView)findViewById(R.id.listView);
 
-        SharedPreferences sharedPref = getSharedPreferences(Constants.sharedPrefName, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(Constants.SHAREDPREFNAME, Context.MODE_PRIVATE);
         Map<String, ?> sharedPrefData = sharedPref.getAll();
 
         final ArrayList<String> stringArrayList = new ArrayList<>();
@@ -48,13 +48,13 @@ public class LoadActivity extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferences sharedPref = getSharedPreferences(Constants.sharedPrefName, Context.MODE_PRIVATE);
+                SharedPreferences sharedPref = getSharedPreferences(Constants.SHAREDPREFNAME, Context.MODE_PRIVATE);
                 String title = stringArrayList.get(position);
                 String jsonString = sharedPref.getString(title, new JSONArray().toString());
 
                 Intent intent = new Intent(LoadActivity.this, CreateActivity.class);
-                intent.putExtra("title", title);
-                intent.putExtra(Constants.jsonArray, jsonString);
+                intent.putExtra(Constants.TITLE, title);
+                intent.putExtra(Constants.JSONSTRING, jsonString);
                 startActivity(intent);
             }
         });

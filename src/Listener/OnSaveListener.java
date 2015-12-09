@@ -22,7 +22,7 @@ public class OnSaveListener implements View.OnClickListener {
         this.createActivity = createActivity;
         this.titleText = (EditText)createActivity.findViewById(R.id.title);
         this.builder = new AlertDialog.Builder(createActivity);
-        this.sharedPref = createActivity.getSharedPreferences(Constants.sharedPrefName, Context.MODE_PRIVATE);
+        this.sharedPref = createActivity.getSharedPreferences(Constants.SHAREDPREFNAME, Context.MODE_PRIVATE);
     }
 
     @Override

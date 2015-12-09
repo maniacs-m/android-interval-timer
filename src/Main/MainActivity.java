@@ -14,22 +14,20 @@ import jemboy.alarmz.R;
 import jemboy.alarmz.Utility.Constants;
 
 public class MainActivity extends Activity {
-    private Button newPlaylist, loadPlaylist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        newPlaylist = (Button)findViewById(R.id.new_playlist);
-        loadPlaylist = (Button)findViewById(R.id.load_playlist);
+        Button newPlaylist = (Button)findViewById(R.id.new_playlist);
+        Button loadPlaylist = (Button)findViewById(R.id.load_playlist);
 
         newPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateActivity.class);
-                intent.putExtra("title", "");
-                JSONArray jsonArray = new JSONArray();
-                intent.putExtra(Constants.jsonArray, jsonArray.toString());
+                intent.putExtra(Constants.TITLE, "");
+                intent.putExtra(Constants.JSONSTRING, new JSONArray().toString());
                 startActivity(intent);
             }
         });

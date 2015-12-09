@@ -12,9 +12,9 @@ import jemboy.alarmz.Builder.CreateActivity;
 import jemboy.alarmz.Builder.OnDialogCompleted;
 import jemboy.alarmz.R;
 
-public class DeleteDialog extends AlertDialog.Builder {
+public class DeleteDialog extends AlertDialog {
     private OnDialogCompleted dialogCompleted;
-    private EditText position;
+    private EditText positionText;
 
     public DeleteDialog(Context context) {
         super(context);
@@ -24,24 +24,35 @@ public class DeleteDialog extends AlertDialog.Builder {
         LayoutInflater layoutInflater = ((Activity)context).getLayoutInflater();
         View dialogView = layoutInflater.inflate(R.layout.dialog_delete, null);
 
-        position = (EditText)dialogView.findViewById(R.id.position);
+        positionText = (EditText)dialogView.findViewById(R.id.position);
 
         setView(dialogView);
 
-        setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                int word1 = Integer.parseInt(position.getText().toString());
-                dialogCompleted.onDeleteCompleted(word1);
-            }
-        });
-
-        setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        setButton(BUTTON_POSITIVE, "Delete", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
             }
         });
 
+        setButton(BUTTON_NEGATIVE, "Cancel", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        setView(dialogView);
+        setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                getButton(BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+            }
+        });
     }
 }

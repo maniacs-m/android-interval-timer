@@ -12,9 +12,9 @@ import jemboy.alarmz.Builder.CreateActivity;
 import jemboy.alarmz.Builder.OnDialogCompleted;
 import jemboy.alarmz.R;
 
-public class EditDialog extends AlertDialog.Builder {
+public class EditDialog extends AlertDialog {
     private OnDialogCompleted dialogCompleted;
-    private EditText description, duration, position;
+    private EditText descriptionText, durationText, positionText;
 
     public EditDialog(Context context) {
         super(context);
@@ -24,26 +24,36 @@ public class EditDialog extends AlertDialog.Builder {
         LayoutInflater layoutInflater = ((Activity)context).getLayoutInflater();
         View dialogView = layoutInflater.inflate(R.layout.dialog_edit, null);
 
-        description = (EditText)dialogView.findViewById(R.id.description);
-        duration = (EditText)dialogView.findViewById(R.id.duration);
-        position = (EditText)dialogView.findViewById(R.id.position);
+        descriptionText = (EditText)dialogView.findViewById(R.id.description);
+        durationText = (EditText)dialogView.findViewById(R.id.duration);
+        positionText = (EditText)dialogView.findViewById(R.id.position);
 
         setView(dialogView);
 
-        setPositiveButton("Update", new DialogInterface.OnClickListener() {
+        setButton(BUTTON_POSITIVE, "Delete", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String word1 = description.getText().toString();
-                int word2 = Integer.parseInt(duration.getText().toString());
-                int word3 = Integer.parseInt(position.getText().toString());
-                dialogCompleted.onEditCompleted(word1, word2, word3);
+
             }
         });
 
-        setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        setButton(BUTTON_NEGATIVE, "Cancel", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+
+        setView(dialogView);
+        setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                getButton(BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
             }
         });
     }

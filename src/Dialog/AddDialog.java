@@ -11,37 +11,45 @@ import jemboy.alarmz.Builder.CreateActivity;
 import jemboy.alarmz.Builder.OnDialogCompleted;
 import jemboy.alarmz.R;
 
-public class AddDialog extends AlertDialog.Builder {
+public class AddDialog extends AlertDialog {
     private OnDialogCompleted dialogCompleted;
-    private EditText description, duration;
+    private EditText descriptionText, durationText;
 
     public AddDialog(Context context) {
         super(context);
-
         dialogCompleted = ((CreateActivity)context);
 
         // Get the layout inflater
         LayoutInflater layoutInflater = ((Activity)context).getLayoutInflater();
         View dialogView = layoutInflater.inflate(R.layout.dialog_add, null);
 
-        description = (EditText)dialogView.findViewById(R.id.description);
-        duration = (EditText)dialogView.findViewById(R.id.duration);
+        descriptionText = (EditText)dialogView.findViewById(R.id.description);
+        durationText = (EditText)dialogView.findViewById(R.id.duration);
 
-        setView(dialogView);
-
-        setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        setButton(BUTTON_POSITIVE, "Add", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String word1 = description.getText().toString();
-                int word2 = Integer.parseInt(duration.getText().toString());
-                dialogCompleted.onAddCompleted(word1, word2);
+
             }
         });
 
-        setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        setButton(BUTTON_NEGATIVE, "Cancel", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+
+        setView(dialogView);
+        setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                getButton(BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
             }
         });
     }

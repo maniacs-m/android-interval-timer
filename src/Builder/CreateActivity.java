@@ -37,18 +37,18 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
         Bundle bundle = getIntent().getExtras();
 
         final EditText titleText = (EditText)findViewById(R.id.title);
-        String title = bundle.getString("title");
+        String title = bundle.getString(Constants.TITLE);
         titleText.setText(title);
 
         intervalArrayList = new ArrayList<>();
         stringArrayList = new ArrayList<>();
         try {
-            String jsonString = bundle.getString(Constants.jsonArray);
+            String jsonString = bundle.getString(Constants.JSONSTRING);
             JSONArray jsonArray = new JSONArray(jsonString);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String description = jsonObject.getString("description");
-                int duration = jsonObject.getInt("duration"), position = jsonObject.getInt("position");
+                String description = jsonObject.getString(Constants.DESCRIPTION);
+                int duration = jsonObject.getInt(Constants.DURATION), position = jsonObject.getInt(Constants.POSITION);
 
                 Interval interval = new Interval(description, duration, position);
                 intervalArrayList.add(interval);
@@ -58,7 +58,7 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
             e.printStackTrace();
         }
         intervalView = (ListView)findViewById(R.id.intervals);
-        updateListView();
+        updateListView(); // Layout is finalized here.. title and listview are set
 
         final Button    addButton = (Button)findViewById(R.id.add),
                         editButton = (Button)findViewById(R.id.edit),
@@ -102,8 +102,8 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
                 } else {
                     Intent intent = new Intent(CreateActivity.this, AlarmActivity.class);
                     String jsonString = getJSONString(intervalArrayList);
-                    intent.putExtra("title", titleText.getText().toString());
-                    intent.putExtra("jsonArray", jsonString);
+                    intent.putExtra(Constants.TITLE, titleText.getText().toString());
+                    intent.putExtra(Constants.JSONSTRING, jsonString);
                     startActivity(intent);
                 }
             }
@@ -111,7 +111,7 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
     }
 
     public void onAddCompleted(String description, int duration) {
-        Interval interval = new Interval(description, duration, intervalArrayList.size());
+        Interval interval = new Interval(description, duration, intervalArrayList.size() + 1);
         intervalArrayList.add(interval);
         stringArrayList.add(interval.toString());
         updateListView();
@@ -119,17 +119,18 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
 
     public void onEditCompleted(String description, int duration, int position) {
         Interval interval = new Interval(description, duration, position);
-        intervalArrayList.set(position, interval);
-        stringArrayList.set(position, interval.toString());
+        intervalArrayList.set(position - 1, interval);
+        stringArrayList.set(position - 1, interval.toString());
         updateListView();
     }
 
     public void onDeleteCompleted(int position) {
+        position = position - 1;
         intervalArrayList.remove(position);
         stringArrayList.remove(position);
         for (int i = position; i < intervalArrayList.size(); i++) {
             Interval interval = intervalArrayList.get(i);
-            interval.setPosition(i);
+            interval.setPosition(i + 1);
             intervalArrayList.set(i, interval);
             stringArrayList.set(i, interval.toString());
         }
@@ -152,10 +153,9 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
                 Interval interval = arrayList.get(i);
 
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("position", interval.getPosition());
-                jsonObject.put("description", interval.getDescription());
-                jsonObject.put("duration", interval.getDuration());
-
+                jsonObject.put(Constants.DESCRIPTION, interval.getDescription());
+                jsonObject.put(Constants.DURATION, interval.getDuration());
+                jsonObject.put(Constants.POSITION, interval.getPosition());
                 jsonArray.put(jsonObject);
             }
         } catch (JSONException e) {

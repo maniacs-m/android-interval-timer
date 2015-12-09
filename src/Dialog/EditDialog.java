@@ -51,7 +51,23 @@ public class EditDialog extends AlertDialog {
                 getButton(BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        String  description = descriptionText.getText().toString(),
+                                duration = durationText.getText().toString(),
+                                position = positionText.getText().toString();
+                        if (description.length() > 0 && duration.length() > 0 && position.length() > 0) {
+                            dialogCompleted.onEditCompleted(
+                                    description,
+                                    Integer.parseInt(duration),
+                                    Integer.parseInt(position)
+                            );
+                            dismiss();
+                        } else if (description.length() == 0) {
+                            descriptionText.setError("You need to write a description!");
+                        } else if (duration.length() == 0) {
+                            durationText.setError("You need to specify the duration!");
+                        } else {
+                            positionText.setError("You need to specify the number!");
+                        }
                     }
                 });
             }

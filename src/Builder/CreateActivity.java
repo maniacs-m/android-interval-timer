@@ -113,7 +113,7 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
     public void onAddCompleted(String description, int duration) {
         Interval interval = new Interval(description, duration);
         intervalArrayList.add(interval);
-        stringArrayList.add(interval.toString());
+        stringArrayList.add("#" + intervalArrayList.size() + " - " + interval.toString());
         updateListView();
     }
 

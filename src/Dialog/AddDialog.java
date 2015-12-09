@@ -47,7 +47,16 @@ public class AddDialog extends AlertDialog {
                 getButton(BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        String  description = descriptionText.getText().toString(),
+                                duration = durationText.getText().toString();
+                        if (description.length() > 0 && duration.length() > 0) {
+                            dialogCompleted.onAddCompleted(description, Integer.parseInt(duration));
+                            dismiss();
+                        } else if (description.length() == 0) {
+                            descriptionText.setError("You need to write a description!");
+                        } else {
+                            durationText.setError("You need to specify the duration!");
+                        }
                     }
                 });
             }

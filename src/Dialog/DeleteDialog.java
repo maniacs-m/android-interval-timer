@@ -49,7 +49,13 @@ public class DeleteDialog extends AlertDialog {
                 getButton(BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        String position = positionText.getText().toString();
+                        if (position.length() > 0) {
+                            dialogCompleted.onDeleteCompleted(Integer.parseInt(position));
+                            dismiss();
+                        } else {
+                            positionText.setError("You need to specify the number!");
+                        }
                     }
                 });
             }

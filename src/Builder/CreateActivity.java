@@ -21,7 +21,7 @@ import jemboy.alarmz.R;
 import jemboy.alarmz.Utility.Constants;
 import jemboy.alarmz.Utility.Interval;
 
-public class CreateActivity extends Activity implements OnDialogCompleted {
+public class CreateActivity extends Activity implements Creator {
     private ArrayList<Interval> intervalArrayList;
     public ArrayList<Interval> getIntervalArrayList() {
         return intervalArrayList;
@@ -66,26 +66,27 @@ public class CreateActivity extends Activity implements OnDialogCompleted {
                         saveButton = (Button)findViewById(R.id.save),
                         startButton = (Button)findViewById(R.id.start);
 
+        // TEST DAT SHIT SON
+        final AddDialog addDialog = new AddDialog(CreateActivity.this);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddDialog addDialog = new AddDialog(CreateActivity.this);
                 addDialog.show();
             }
         });
 
+        final EditDialog editDialog = new EditDialog(CreateActivity.this);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditDialog editDialog = new EditDialog(CreateActivity.this);
                 editDialog.show();
             }
         });
 
+        final DeleteDialog deleteDialog = new DeleteDialog(CreateActivity.this);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeleteDialog deleteDialog = new DeleteDialog(CreateActivity.this);
                 deleteDialog.show();
             }
         });

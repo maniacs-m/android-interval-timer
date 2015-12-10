@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import jemboy.alarmz.Builder.CreateActivity;
-import jemboy.alarmz.Builder.OnDialogCompleted;
+import jemboy.alarmz.Builder.Creator;
 import jemboy.alarmz.R;
 
 public class DeleteDialog extends AlertDialog {
-    private OnDialogCompleted dialogCompleted;
+    private Creator dialogCompleted;
     private EditText positionText;
 
     public DeleteDialog(Context context) {

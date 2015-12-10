@@ -11,52 +11,70 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+import jemboy.alarmz.Dialog.LoadDialog;
 import jemboy.alarmz.R;
 import jemboy.alarmz.Utility.Constants;
-import jemboy.alarmz.Utility.Interval;
 
-public class LoadActivity extends Activity {
-
+public class LoadActivity extends Activity implements Loader {
+    ListView listView;
+    ArrayList<String> stringArrayList;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
 
-        ListView listView = (ListView)findViewById(R.id.listView);
+        listView = (ListView)findViewById(R.id.listView);
 
         SharedPreferences sharedPref = getSharedPreferences(Constants.SHAREDPREFNAME, Context.MODE_PRIVATE);
         Map<String, ?> sharedPrefData = sharedPref.getAll();
 
-        final ArrayList<String> stringArrayList = new ArrayList<>();
-
+        stringArrayList = new ArrayList<>();
         for (String key : sharedPrefData.keySet()) {
             stringArrayList.add(key);
         }
+        updateListView();
 
+        final LoadDialog loadDialog = new LoadDialog(this);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String title = stringArrayList.get(position);
+                loadDialog.setTitle(title);
+                loadDialog.show();
+            }
+        });
+    }
+
+    public void onLoadCompleted(String title) {
+        SharedPreferences sharedPref = getSharedPreferences(Constants.SHAREDPREFNAME, Context.MODE_PRIVATE);
+        String jsonString = sharedPref.getString(title, new JSONArray().toString());
+
+        Intent intent = new Intent(LoadActivity.this, CreateActivity.class);
+        intent.putExtra(Constants.TITLE, title);
+        intent.putExtra(Constants.JSONSTRING, jsonString);
+        startActivity(intent);
+    }
+
+    public void onDeleteCompleted(String title) {
+        SharedPreferences sharedPref = getSharedPreferences(Constants.SHAREDPREFNAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.remove(title);
+        editor.apply();
+        
+        stringArrayList.remove(title);
+        updateListView();
+    }
+
+    public void updateListView() {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 stringArrayList
         );
         listView.setAdapter(arrayAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferences sharedPref = getSharedPreferences(Constants.SHAREDPREFNAME, Context.MODE_PRIVATE);
-                String title = stringArrayList.get(position);
-                String jsonString = sharedPref.getString(title, new JSONArray().toString());
-
-                Intent intent = new Intent(LoadActivity.this, CreateActivity.class);
-                intent.putExtra(Constants.TITLE, title);
-                intent.putExtra(Constants.JSONSTRING, jsonString);
-                startActivity(intent);
-            }
-        });
     }
 }

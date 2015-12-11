@@ -66,27 +66,26 @@ public class CreateActivity extends Activity implements Creator {
                         saveButton = (Button)findViewById(R.id.save),
                         startButton = (Button)findViewById(R.id.start);
 
-        // TEST DAT SHIT SON
-        final AddDialog addDialog = new AddDialog(CreateActivity.this);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final AddDialog addDialog = new AddDialog(CreateActivity.this);
                 addDialog.show();
             }
         });
 
-        final EditDialog editDialog = new EditDialog(CreateActivity.this);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final EditDialog editDialog = new EditDialog(CreateActivity.this);
                 editDialog.show();
             }
         });
 
-        final DeleteDialog deleteDialog = new DeleteDialog(CreateActivity.this);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final DeleteDialog deleteDialog = new DeleteDialog(CreateActivity.this);
                 deleteDialog.show();
             }
         });

@@ -43,7 +43,7 @@ public class LoadActivity extends Activity implements Loader {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String title = stringArrayList.get(position);
-                loadDialog.setTitle(title);
+                loadDialog.setFilename(title);
                 loadDialog.show();
             }
         });

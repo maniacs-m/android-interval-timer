@@ -2,38 +2,26 @@ package jemboy.alarmz.Main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
 import jemboy.alarmz.R;
+import jemboy.alarmz.Runnable.LovelyCountDown;
 import jemboy.alarmz.Utility.Constants;
 import jemboy.alarmz.Utility.Interval;
 
-public class AlarmActivity extends Activity {
+public class AlarmActivity extends Activity implements LovelyCounter {
     private ArrayList<Interval> intervalArrayList;
-    private Interval interval;
 
-    private CountDownTimer countDown;
+    private LovelyCountDown lovelyCountDown;
     private TextView intervalDescription, alarmChronometer, totalChronometer;
     private int totalDuration = 0, currentDuration = 0, currentPosition = 0;
 
@@ -63,18 +51,24 @@ public class AlarmActivity extends Activity {
             e.printStackTrace();
         }
 
+        currentDuration = intervalArrayList.get(0).getDuration();
         intervalDescription     = (TextView)findViewById(R.id.alarm_description);
         alarmChronometer        = (TextView)findViewById(R.id.alarm_countdown);
         totalChronometer        = (TextView)findViewById(R.id.total_countdown);
 
-        ToggleButton continueButton = (ToggleButton)findViewById(R.id.continue_pause);
+        intervalDescription.setText(intervalArrayList.get(0).getDescription());
+        alarmChronometer.setText(formatSeconds(currentDuration));
+        totalChronometer.setText(formatSeconds(totalDuration));
+
+        final ToggleButton continueButton = (ToggleButton)findViewById(R.id.continue_pause);
         continueButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-
+                    lovelyCountDown = new LovelyCountDown(AlarmActivity.this);
+                    lovelyCountDown.start();
                 } else {
-
+                    lovelyCountDown.stop();
                 }
             }
         });
@@ -85,6 +79,14 @@ public class AlarmActivity extends Activity {
             public void onClick(View v) {
                 if (currentPosition > 0)
                     currentPosition--;
+                intervalDescription.setText(intervalArrayList.get(currentPosition).getDescription());
+                currentDuration = intervalArrayList.get(currentPosition).getDuration();
+                totalDuration = 0;
+                for (int i = currentPosition; i < intervalArrayList.size(); i++) {
+                    totalDuration += intervalArrayList.get(i).getDuration();
+                }
+                alarmChronometer.setText(formatSeconds(currentDuration));
+                totalChronometer.setText(formatSeconds(totalDuration));
             }
         });
 
@@ -94,6 +96,14 @@ public class AlarmActivity extends Activity {
             public void onClick(View v) {
                 if (currentPosition < intervalArrayList.size() - 1)
                     currentPosition++;
+                intervalDescription.setText(intervalArrayList.get(currentPosition).getDescription());
+                currentDuration = intervalArrayList.get(currentPosition).getDuration();
+                totalDuration = 0;
+                for (int i = currentPosition; i < intervalArrayList.size(); i++) {
+                    totalDuration += intervalArrayList.get(i).getDuration();
+                }
+                alarmChronometer.setText(formatSeconds(currentDuration));
+                totalChronometer.setText(formatSeconds(totalDuration));
             }
         });
 
@@ -102,23 +112,31 @@ public class AlarmActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AlarmActivity.this, MainActivity.class);
+                if (continueButton.isChecked()) {
+                    continueButton.setChecked(false);
+                    // Stop the timers
+                }
+                startActivity(intent);
             }
         });
     }
 
-    public void instantiateCountDown(long millisInFuture, long countDownInterval, int index) {
-        interval = intervalArrayList.get(index);
-        countDown = new CountDownTimer(millisInFuture, countDownInterval) {
-            @Override
-            public void onTick(long millisUntilFinished) {
+    public void onLovelyCount() {
+        currentDuration--;
+        totalDuration--;
 
-            }
+        alarmChronometer.setText(formatSeconds(currentDuration));
+        totalChronometer.setText(formatSeconds(totalDuration));
 
-            @Override
-            public void onFinish() {
+        if (totalDuration == 0) {
+            lovelyCountDown.stop();
+        }
 
-            }
-        };
+        else if (currentDuration == 0) {
+            currentPosition++;
+            currentDuration = intervalArrayList.get(currentPosition).getDuration();
+            intervalDescription.setText(intervalArrayList.get(currentPosition).getDescription());
+        }
     }
 
     public String formatSeconds(int seconds) {

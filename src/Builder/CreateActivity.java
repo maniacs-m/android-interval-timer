@@ -52,7 +52,7 @@ public class CreateActivity extends Activity implements Creator {
 
                 Interval interval = new Interval(description, duration);
                 intervalArrayList.add(interval);
-                stringArrayList.add(interval.toString());
+                stringArrayList.add("#" + intervalArrayList.size() + " - " + interval.toString());
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -8,7 +8,7 @@ import jemboy.alarmz.Builder.Loader;
 
 public class LoadDialog extends AlertDialog {
     private Loader dialogCompleted;
-    private String title = "";
+    private String filename = "";
 
     public LoadDialog(Context context) {
         super(context);
@@ -18,23 +18,24 @@ public class LoadDialog extends AlertDialog {
         setButton(BUTTON_POSITIVE, "Delete", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialogCompleted.onDeleteCompleted(title);
+                dialogCompleted.onDeleteCompleted(filename);
             }
         });
 
         setButton(BUTTON_NEGATIVE, "Load", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialogCompleted.onLoadCompleted(title);
+                dialogCompleted.onLoadCompleted(filename);
             }
         });
     }
 
-    public String getTitle() {
-        return title;
+    public String getFilename() {
+        return filename;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setFilename(String filename) {
+        setTitle(filename);
+        this.filename = filename;
     }
 }

@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".Main.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,10 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AlarmActivity" />
-        <activity android:name=".CreateActivity" />
-        <activity android:name=".EditActivity" />
-        <activity android:name=".LoadActivity" />
+        <activity android:name=".Main.AlarmActivity" />
+        <activity android:name=".Builder.CreateActivity" />
+        <activity android:name=".Builder.LoadActivity" />
     </application>
 
 </manifest>

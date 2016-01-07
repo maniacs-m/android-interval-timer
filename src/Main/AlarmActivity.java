@@ -2,6 +2,9 @@ package jemboy.alarmz.Main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +25,9 @@ public class AlarmActivity extends Activity implements LovelyCounter {
     private ArrayList<Interval> intervalArrayList;
 
     private LovelyCountDown lovelyCountDown;
+    private ToggleButton continueButton;
+    private Ringtone ringtone;
+
     private TextView intervalDescription, alarmChronometer, totalChronometer;
     private int totalDuration = 0, currentDuration = 0, currentPosition = 0;
 
@@ -33,6 +39,9 @@ public class AlarmActivity extends Activity implements LovelyCounter {
         Bundle bundle = getIntent().getExtras();
         TextView titleView = (TextView)findViewById(R.id.filename);
         titleView.setText(bundle.getString(Constants.TITLE));
+
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        ringtone = RingtoneManager.getRingtone(getApplicationContext(), uri);
 
         intervalArrayList = new ArrayList<>();
         try {
@@ -60,14 +69,18 @@ public class AlarmActivity extends Activity implements LovelyCounter {
         alarmChronometer.setText(formatSeconds(currentDuration));
         totalChronometer.setText(formatSeconds(totalDuration));
 
-        final ToggleButton continueButton = (ToggleButton)findViewById(R.id.continue_pause);
+        continueButton = (ToggleButton)findViewById(R.id.continue_pause);
         continueButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    lovelyCountDown = new LovelyCountDown(AlarmActivity.this);
-                    lovelyCountDown.start();
-                } else {
+                    if (totalDuration > 0) {
+                        lovelyCountDown = new LovelyCountDown(AlarmActivity.this);
+                        lovelyCountDown.start();
+                    } else {
+                        buttonView.toggle();
+                    }
+                } else if (!isChecked) {
                     lovelyCountDown.stop();
                 }
             }
@@ -114,7 +127,7 @@ public class AlarmActivity extends Activity implements LovelyCounter {
                 Intent intent = new Intent(AlarmActivity.this, MainActivity.class);
                 if (continueButton.isChecked()) {
                     continueButton.setChecked(false);
-                    // Stop the timers
+                    lovelyCountDown.stop();
                 }
                 startActivity(intent);
             }
@@ -129,10 +142,13 @@ public class AlarmActivity extends Activity implements LovelyCounter {
         totalChronometer.setText(formatSeconds(totalDuration));
 
         if (totalDuration == 0) {
+            ringtone.play();
+            continueButton.setChecked(false);
             lovelyCountDown.stop();
         }
 
         else if (currentDuration == 0) {
+            ringtone.play();
             currentPosition++;
             currentDuration = intervalArrayList.get(currentPosition).getDuration();
             intervalDescription.setText(intervalArrayList.get(currentPosition).getDescription());
@@ -141,13 +157,11 @@ public class AlarmActivity extends Activity implements LovelyCounter {
 
     public String formatSeconds(int seconds) {
         int minutes = seconds / 60, remainder = seconds % 60;
-
         String alpha = "", omega = "";
         if (String.valueOf(minutes).length() == 1)
             alpha = "0";
         if (String.valueOf(remainder).length() == 1)
             omega = "0";
-
         return alpha + minutes + ":" + omega + remainder;
     }
 }

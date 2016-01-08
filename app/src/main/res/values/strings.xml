@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Interval Timer</string>
+    <string name="new_playlist">New Playlist</string>
+    <string name="load_playlist">Load Playlist</string>
+    <string name="playlist_title">Playlist Title</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="start">Start</string>
+    <string name="save_files">Save Files</string>
+    <string name="filename">Filename</string>
+    <string name="interval_description">Interval Description</string>
+    <string name="interval_duration">Interval Duration:</string>
+    <string name="total_duration">Total Duration:</string>
+    <string name="default_time">00:00</string>
+    <string name="quit">Quit</string>
+    <string name="pause_alarm">Pause</string>
+    <string name="continue_alarm">Continue</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="description">Description</string>
+    <string name="duration">Duration in Seconds</string>
+    <string name="position">Position</string>
+
+</resources>
